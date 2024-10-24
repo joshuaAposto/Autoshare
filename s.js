@@ -1,7 +1,7 @@
 const serverUrls = {
-    server1: 'https://autoshare-3uya.onrender.com',
-    server2: '',
-    server3: '',
+    server1: 'https://joshua1-ybun.onrender.com',
+    server2: 'https://joshua2.onrender.com',
+    server3: 'https://joshua3.onrender.com',
 };
 
 async function checkServerStatus() {
