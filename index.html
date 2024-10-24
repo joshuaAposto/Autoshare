@@ -72,6 +72,21 @@
             border-color: #00adb5;
             outline: none;
         }
+        select {
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid #444;
+            background-color: #3a3a3a;
+            color: #f5f5f5;
+            font-size: 16px;
+            transition: border-color 0.3s ease, background-color 0.3s ease;
+        }
+        select:focus {
+            background-color: #444;
+            border-color: #00adb5;
+            outline: none;
+        }
         button {
             padding: 12px;
             border: none;
@@ -87,6 +102,10 @@
         }
         button:hover {
             background-color: #007e85;
+        }
+        button:disabled {
+            background-color: #666;
+            cursor: not-allowed;
         }
         #result {
             margin-top: 15px;
@@ -114,7 +133,7 @@
             button {
                 font-size: 14px;
             }
-            input {
+            input, select {
                 font-size: 14px;
             }
         }
@@ -139,53 +158,20 @@
             </div>
             <div class="form-item">
                 <label for="intervals">DELAY:</label>
-                <input type="number" id="intervals" name="interval" placeholder="Enter Delay (in seconds )(example: 1)" required min="0">
+                <input type="number" id="intervals" name="interval" placeholder="Enter Delay (in seconds)" required min="1">
             </div>
             <div class="form-item">
-                <button type="submit" id="submit-button">Submit</button>
+                <label for="server">SERVER:</label>
+                <select id="server" name="server" required>
+                    <option value="server1">Server 1</option>
+                    <option value="server2">Server 2</option>
+                    <option value="server3">Server 3</option>
+                </select>
             </div>
-            <div class="form-item">
-                <div id="result"></div>
-            </div>
+            <button type="submit" id="submit-button" disabled>SUBMIT</button>
+            <div id="result"></div>
         </form>
     </div>
-    <script>
-        async function submitForm(event) {
-            event.preventDefault();
-            const result = document.getElementById('result');
-            const button = document.getElementById('submit-button');
-            try {
-                result.style.display = 'block';
-                button.disabled = true;
-                result.className = '';
-                const response = await fetch('https://autoshare-3uya.onrender.com/api/submit', {
-                    method: 'POST',
-                    body: JSON.stringify({
-                        cookie: document.getElementById('cookies').value,
-                        url: document.getElementById('urls').value,
-                        amount: document.getElementById('amounts').value,
-                        interval: document.getElementById('intervals').value,
-                    }),
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                });
-                const data = await response.json();
-                if (data.status === 200) {
-                    result.className = 'success';
-                    result.innerHTML = 'Submitted successfully!';
-                } else {
-                    result.className = 'error';
-                    result.innerHTML = 'Error: ' + data.error;
-                }
-            } catch (e) {
-                console.error(e);
-                result.className = 'error';
-                result.innerHTML = 'An error occurred. Please try again.';
-            } finally {
-                button.disabled = false;
-            }
-        }
-    </script>
+    <script src="s.js"></script>
 </body>
 </html>
