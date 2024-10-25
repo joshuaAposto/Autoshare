@@ -1,11 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Share Boost</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+
+        :root {
+            --primary-color: #00adb5;
+            --secondary-color: #393e46;
+            --background-color: #222831;
+            --text-color: #eeeeee;
+        }
 
         * {
             margin: 0;
@@ -15,29 +23,42 @@
 
         body {
             font-family: 'Poppins', sans-serif;
-            background: linear-gradient(135deg, #0a192f, #1e1e1e);
-            color: #f5f5f5;
+            background: linear-gradient(135deg, var(--background-color), var(--secondary-color));
+            color: var(--text-color);
             display: flex;
             flex-direction: column;
             align-items: center;
             min-height: 100vh;
             padding: 20px;
+            overflow-x: hidden;
+        }
+
+        #particles-js {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
         }
 
         .wrapper-container {
             max-width: 600px;
             width: 100%;
             padding: 30px;
-            background-color: rgba(44, 44, 44, 0.8);
+            background-color: rgba(57, 62, 70, 0.8);
             border-radius: 12px;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
             margin-bottom: 20px;
             transition: all 0.3s ease;
+            animation: fadeIn 1s ease;
+            position: relative;
+            z-index: 1;
         }
 
         h1 {
             text-align: center;
-            color: #00adb5;
+            color: var(--primary-color);
             margin-bottom: 20px;
             font-size: 36px;
             font-weight: bold;
@@ -48,7 +69,7 @@
             text-align: center;
             margin-bottom: 20px;
             font-size: 18px;
-            color: #cccccc;
+            color: var(--text-color);
             animation: fadeIn 1s ease 0.5s both;
         }
 
@@ -60,33 +81,57 @@
 
         .form-item {
             margin-bottom: 20px;
+            opacity: 0;
+            animation: slideInFromLeft 0.5s ease forwards;
+        }
+
+        .form-item:nth-child(1) {
+            animation-delay: 0.2s;
+        }
+
+        .form-item:nth-child(2) {
+            animation-delay: 0.4s;
+        }
+
+        .form-item:nth-child(3) {
+            animation-delay: 0.6s;
+        }
+
+        .form-item:nth-child(4) {
+            animation-delay: 0.8s;
+        }
+
+        .form-item:nth-child(5) {
+            animation-delay: 1s;
         }
 
         label {
             font-size: 16px;
-            color: #cccccc;
+            color: var(--text-color);
             margin-bottom: 8px;
             display: block;
         }
 
-        input, select {
+        input,
+        select {
             width: 100%;
             padding: 12px;
             border-radius: 8px;
-            border: 1px solid #444;
-            background-color: #3a3a3a;
-            color: #f5f5f5;
+            border: 1px solid var(--secondary-color);
+            background-color: rgba(238, 238, 238, 0.1);
+            color: var(--text-color);
             font-size: 16px;
             transition: all 0.3s ease;
         }
 
         input::placeholder {
-            color: #888;
+            color: rgba(238, 238, 238, 0.5);
         }
 
-        input:focus, select:focus {
-            background-color: #444;
-            border-color: #00adb5;
+        input:focus,
+        select:focus {
+            background-color: rgba(238, 238, 238, 0.2);
+            border-color: var(--primary-color);
             outline: none;
             box-shadow: 0 0 5px rgba(0, 173, 181, 0.5);
         }
@@ -95,14 +140,15 @@
             padding: 12px 24px;
             border: none;
             border-radius: 8px;
-            background-color: #00adb5;
-            color: white;
+            background-color: var(--primary-color);
+            color: var(--text-color);
             font-size: 18px;
             cursor: pointer;
             transition: all 0.3s ease;
             margin: 0 auto;
             display: block;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+            animation: pulse 2s infinite;
         }
 
         button:hover {
@@ -114,6 +160,7 @@
             background-color: #666;
             cursor: not-allowed;
             transform: none;
+            animation: none;
         }
 
         #result {
@@ -194,9 +241,123 @@
             transform: translateY(-2px);
         }
 
+        #chat-button {
+            position: fixed;
+            bottom: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            right: 20px;
+            background-color: var(--primary-color);
+            color: var(--text-color);
+            border: none;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        #chat-button:hover {
+            transform: scale(1.1);
+        }
+
+        #chat-container {
+            display: none;
+            position: fixed;
+            bottom: 90px;
+            right: 20px;
+            width: 300px;
+            height: 400px;
+            background-color: rgba(57, 62, 70, 0.9);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+        }
+
+        #chat-messages {
+            height: 340px;
+            overflow-y: auto;
+            padding: 10px;
+        }
+
+        .message {
+            margin-bottom: 10px;
+            padding: 8px 12px;
+            border-radius: 8px;
+            max-width: 80%;
+            position: relative;
+            display: inline-block;
+        }
+
+        .user-message {
+            background-color: var(--primary-color);
+            color: var(--text-color);
+            /* align-self: flex-end; */
+            float: right;
+            clear: both;
+            margin-left: auto;
+
+        }
+
+        /* .assistant-message {
+            background-color: var(--secondary-color);
+            color: var(--text-color);
+            align-self: flex-start;
+        } */
+
+        .assistant-message {
+            background-color: var(--secondary-color);
+            color: var(--text-color);
+            float: left;
+            clear: both;
+        }
+
+        .copy-button {
+            display: none;
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background-color: rgba(255, 255, 255, 0.3);
+            border: none;
+            border-radius: 4px;
+            padding: 2px 5px;
+            font-size: 12px;
+            cursor: pointer;
+        }
+
+        .message:hover .copy-button,
+        .message:active .copy-button {
+            display: block;
+        }
+
+        #chat-input {
+            display: flex;
+            padding: 10px;
+        }
+
+        #chat-input input {
+            flex-grow: 1;
+            margin-right: 10px;
+        }
+
+        #chat-input button {
+            padding: 8px 12px;
+            font-size: 14px;
+        }
+
         @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
         }
 
         @keyframes fadeInDown {
@@ -204,9 +365,36 @@
                 opacity: 0;
                 transform: translateY(-20px);
             }
+
             to {
                 opacity: 1;
                 transform: translateY(0);
+            }
+        }
+
+        @keyframes slideInFromLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.05);
+            }
+
+            100% {
+                transform: scale(1);
             }
         }
 
@@ -234,13 +422,16 @@
                 margin-right: 20px;
             }
 
-            input, select {
+            input,
+            select {
                 flex: 1;
             }
         }
     </style>
 </head>
+
 <body>
+    <div id="particles-js"></div>
     <div class="wrapper-container">
         <h1>SHARE BOOST</h1>
         <p>An automated tool for sharing Facebook posts via URL and cookies.</p>
@@ -259,7 +450,8 @@
             </div>
             <div class="form-item">
                 <label for="intervals">DELAY:</label>
-                <input type="number" id="intervals" name="interval" placeholder="Enter Delay (in seconds)" required min="1">
+                <input type="number" id="intervals" name="interval" placeholder="Enter Delay (in seconds)" required
+                    min="1">
             </div>
             <div class="form-item">
                 <label for="server">SERVER:</label>
@@ -278,8 +470,10 @@
             </button>
         </div>
         <div class="burat-button">
-            <button class="dev-btn" onclick="window.open('https://www.facebook.com/profile.php?id=100088690249020', '')">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg" alt="Facebook Logo" class="logo">
+            <button class="dev-btn"
+                onclick="window.open('https://www.facebook.com/profile.php?id=100088690249020', '')">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg"
+                    alt="Facebook Logo" class="logo">
                 Developer
             </button>
         </div>
@@ -293,12 +487,195 @@
             </video>
         </div>
     </div>
-    <script src="s.js"></script>
+    <button id="chat-button" onclick="toggleChat()">💬</button>
+    <div id="chat-container">
+        <div id="chat-messages"></div>
+        <div id="chat-input">
+            <input type="text" id="user-input" placeholder="Type your message...">
+            <button onclick="sendMessage()">Send</button>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
     <script>
-        function toggleVideo() {
-        const videoContainer = document.getElementById('video-container');
-        videoContainer.style.display = videoContainer.style.display === 'block' ? 'none' : 'block';
+        const serverUrls = {
+            server1: 'https://joshua1-ybun.onrender.com',
+            server2: 'https://joshua2.onrender.com',
+            server3: 'https://joshua3.onrender.com',
+        };
+
+        particlesJS('particles-js', {
+            particles: {
+                number: { value: 80, density: { enable: true, value_area: 800 } },
+                color: { value: "#ffffff" },
+                shape: { type: "circle", stroke: { width: 0, color: "#000000" }, },
+                opacity: { value: 0.5, random: false, },
+                size: { value: 3, random: true, },
+                line_linked: { enable: true, distance: 150, color: "#ffffff", opacity: 0.4, width: 1 },
+                move: { enable: true, speed: 6, direction: "none", random: false, straight: false, out_mode: "out", bounce: false, },
+            },
+            interactivity: {
+                detect_on: "canvas",
+                events: { onhover: { enable: true, mode: "repulse" }, onclick: { enable: true, mode: "push" }, resize: true },
+                modes: { grab: { distance: 400, line_linked: { opacity: 1 } }, bubble: { distance: 400, size: 40, duration: 2, opacity: 8, speed: 3 }, repulse: { distance: 200, duration: 0.4 }, push: { particles_nb: 4 }, remove: { particles_nb: 2 } },
+            },
+            retina_detect: true
+        });
+
+        async function checkServerStatus() {
+            const servers = document.querySelectorAll('#server option');
+            let allDown = true;
+            let retries = 0;
+
+            for (const server of servers) {
+                const serverKey = server.value;
+                try {
+                    const response = await fetch(serverUrls[serverKey]);
+                    if (response.ok) {
+                        server.textContent = `${serverKey.replace('server', 'Server ')} (active)`;
+                        allDown = false;
+                    } else {
+                        server.textContent = `${serverKey.replace('server', 'Server ')} (down)`;
+                    }
+                } catch (error) {
+                    server.textContent = `${serverKey.replace('server', 'Server ')} (down)`;
+                }
+                retries++;
+            }
+
+            const submitButton = document.getElementById('submit-button');
+            if (allDown) {
+                submitButton.disabled = true;
+                const errorMessage = document.createElement('div');
+                errorMessage.textContent = 'Server Error: Unable to retrieve servers. This might be due to no available servers or a connectivity issue. Please reload the page and ensure your internet connection is stable. Retries: ' + retries;
+                errorMessage.style.color = '#f44336';
+                errorMessage.style.textAlign = 'center';
+                errorMessage.style.marginTop = '15px';
+                errorMessage.style.fontSize = '14px';
+                document.querySelector('.wrapper-container').appendChild(errorMessage);
+            } else {
+                submitButton.disabled = false;
+            }
         }
+
+        window.onload = checkServerStatus;
+
+        function validateAppState(appState) {
+            return appState.length > 0;
+        }
+
+        async function submitForm(event) {
+            event.preventDefault();
+            const result = document.getElementById('result');
+            const button = document.getElementById('submit-button');
+            const selectedServer = document.getElementById('server').value;
+            const server = serverUrls[selectedServer];
+            const appState = document.getElementById('cookies').value;
+
+            if (!validateAppState(appState)) {
+                result.style.display = 'block';
+                result.className = 'error';
+                result.innerHTML = 'Invalid Appstate. Please check and try again.';
+                return;
+            }
+
+            try {
+                result.style.display = 'block';
+                button.disabled = true;
+                result.className = '';
+                const response = await fetch(`${server}/api/submit`, {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        cookie: appState,
+                        url: document.getElementById('urls').value,
+                        amount: document.getElementById('amounts').value,
+                        interval: document.getElementById('intervals').value,
+                    }),
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                });
+                const data = await response.json();
+                if (data.status === 200) {
+                    result.className = 'success';
+                    result.innerHTML = 'Submitted successfully!';
+                } else {
+                    result.className = 'error';
+                    result.innerHTML = 'Error: ' + data.message;
+                }
+            } catch (error) {
+                result.className = 'error';
+                result.innerHTML = 'Network error, please try again later.';
+            } finally {
+                button.disabled = false;
+            }
+        }
+
+        function toggleVideo() {
+            const videoContainer = document.getElementById('video-container');
+            videoContainer.style.display = videoContainer.style.display === 'block' ? 'none' : 'block';
+        }
+
+        function toggleChat() {
+            const chatContainer = document.getElementById('chat-container');
+            chatContainer.style.display = chatContainer.style.display === 'block' ? 'none' : 'block';
+        }
+
+        let userId = null;
+
+        function genID() {
+            return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+        }
+
+        async function sendMessage() {
+            const inp = document.getElementById('user-input');
+            const message = inp.value.trim();
+            if (message === '') return;
+
+            addMessage(message, 'user-message');
+            inp.value = '';
+
+            if (!userId) {
+                userId = genID();
+            }
+
+            try {
+                const r = await fetch(`https://joshweb.click/gpt4?prompt=${encodeURIComponent(message)}&uid=${userId}`);
+                const d = await r.json();
+                addMessage(d.gpt4, 'assistant-message');
+            } catch (error) {
+                addMessage('Sorry, there was an error processing your request: ' + error.message, 'assistant-message');
+            }
+        }
+
+        function addMessage(message, className) {
+            const chatMsg = document.getElementById('chat-messages');
+            const msg = document.createElement('div');
+            msg.classList.add('message', className);
+            msg.textContent = message;
+
+            const copyButton = document.createElement('button');
+            copyButton.classList.add('copy-button');
+            copyButton.textContent = 'Copy';
+            copyButton.onclick = function () {
+                navigator.clipboard.writeText(message).then(() => {
+                    copyButton.textContent = 'Copied!';
+                    setTimeout(() => {
+                        copyButton.textContent = 'Copy';
+                    }, 2000);
+                });
+            };
+
+            msg.appendChild(copyButton);
+            chatMsg.appendChild(msg);
+            chatMsg.scrollTop = chatMsg.scrollHeight;
+        }
+
+        document.getElementById('user-input').addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
     </script>
 </body>
-</html>
+
+    </html>
