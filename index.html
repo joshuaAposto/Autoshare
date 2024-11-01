@@ -193,7 +193,7 @@
             margin-top: 20px;
             animation: fadeIn 0.5s ease;
         }
-        
+
         .logo {
             width: 24px;
             height: 24px;
@@ -434,15 +434,12 @@
             </div>
             <div class="form-item">
                 <label for="intervals">DELAY:</label>
-                <input type="number" id="intervals" name="interval" placeholder="Enter Delay (in seconds)" required
-                    min="1">
+                <input type="number" id="intervals" name="interval" placeholder="Enter Delay (in seconds)" required min="1">
             </div>
             <div class="form-item">
                 <label for="server">SERVER:</label>
                 <select id="server" name="server" required>
                     <option value="server1">Server 1</option>
-                    <option value="server2">Server 2</option>
-                    <option value="server3">Server 3</option>
                 </select>
             </div>
             <button type="submit" id="submit-button" disabled>SUBMIT</button>
@@ -458,36 +455,94 @@
             </video>
         </div>
     </div>
-    <button id="chat-button" onclick="toggleChat()">💬</button>
-    <div id="chat-container">
-        <div id="chat-messages"></div>
-        <div id="chat-input">
-            <input type="text" id="user-input" placeholder="Type your message...">
-            <button onclick="sendMessage()">Send</button>
-        </div>
-    </div>
     <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
     <script>
         const serverUrls = {
-            server1: 'https://joshua1-pxmn.onrender.com',
-            server2: 'https://37xxq4ko2c6bl.ahost.marscode.site',
-            server3: 'https://37y1lfolr2cml.ahost.marscode.site',
+            server1: 'https://autoshare-ya35.onrender.com'
         };
 
         particlesJS('particles-js', {
             particles: {
-                number: { value: 80, density: { enable: true, value_area: 800 } },
-                color: { value: "#ffffff" },
-                shape: { type: "circle", stroke: { width: 0, color: "#000000" }, },
-                opacity: { value: 0.5, random: false, },
-                size: { value: 3, random: true, },
-                line_linked: { enable: true, distance: 150, color: "#ffffff", opacity: 0.4, width: 1 },
-                move: { enable: true, speed: 6, direction: "none", random: false, straight: false, out_mode: "out", bounce: false, },
+                number: {
+                    value: 80,
+                    density: {
+                        enable: true,
+                        value_area: 800
+                    }
+                },
+                color: {
+                    value: "#ffffff"
+                },
+                shape: {
+                    type: "circle",
+                    stroke: {
+                        width: 0,
+                        color: "#000000"
+                    },
+                },
+                opacity: {
+                    value: 0.5,
+                    random: false,
+                },
+                size: {
+                    value: 3,
+                    random: true,
+                },
+                line_linked: {
+                    enable: true,
+                    distance: 150,
+                    color: "#ffffff",
+                    opacity: 0.4,
+                    width: 1
+                },
+                move: {
+                    enable: true,
+                    speed: 6,
+                    direction: "none",
+                    random: false,
+                    straight: false,
+                    out_mode: "out",
+                    bounce: false,
+                },
             },
             interactivity: {
                 detect_on: "canvas",
-                events: { onhover: { enable: true, mode: "repulse" }, onclick: { enable: true, mode: "push" }, resize: true },
-                modes: { grab: { distance: 400, line_linked: { opacity: 1 } }, bubble: { distance: 400, size: 40, duration: 2, opacity: 8, speed: 3 }, repulse: { distance: 200, duration: 0.4 }, push: { particles_nb: 4 }, remove: { particles_nb: 2 } },
+                events: {
+                    onhover: {
+                        enable: true,
+                        mode: "repulse"
+                    },
+                    onclick: {
+                        enable: true,
+                        mode: "push"
+                    },
+                    resize: true
+                },
+                modes: {
+                    grab: {
+                        distance: 400,
+                        line_linked: {
+                            opacity: 1
+                        }
+                    },
+                    bubble: {
+                        distance: 400,
+                        size: 40,
+                        duration: 2,
+                        opacity: 8,
+                        speed: 3
+                    },
+                    repulse: {
+                        distance: 200,
+                        duration: 0.4
+                    },
+                    push: {
+                        particles_nb: 4
+                    },
+                    remove: {
+                        particles_nb: 2
+                    }
+                },
             },
             retina_detect: true
         });
@@ -590,63 +645,7 @@
             const chatContainer = document.getElementById('chat-container');
             chatContainer.style.display = chatContainer.style.display === 'block' ? 'none' : 'block';
         }
-
-        let userId = null;
-
-        function genID() {
-            return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
-        }
-
-        async function sendMessage() {
-            const inp = document.getElementById('user-input');
-            const message = inp.value.trim();
-            if (message === '') return;
-
-            addMessage(message, 'user-message');
-            inp.value = '';
-
-            if (!userId) {
-                userId = genID();
-            }
-
-            try {
-                const r = await fetch(`https://joshweb.click/gpt4?prompt=${encodeURIComponent(message)}&uid=${userId}`);
-                const d = await r.json();
-                addMessage(d.gpt4, 'assistant-message');
-            } catch (error) {
-                addMessage('Sorry, there was an error processing your request: ' + error.message, 'assistant-message');
-            }
-        }
-
-        function addMessage(message, className) {
-            const chatMsg = document.getElementById('chat-messages');
-            const msg = document.createElement('div');
-            msg.classList.add('message', className);
-            msg.textContent = message;
-
-            const copyButton = document.createElement('button');
-            copyButton.classList.add('copy-button');
-            copyButton.textContent = 'Copy';
-            copyButton.onclick = function () {
-                navigator.clipboard.writeText(message).then(() => {
-                    copyButton.textContent = 'Copied!';
-                    setTimeout(() => {
-                        copyButton.textContent = 'Copy';
-                    }, 2000);
-                });
-            };
-
-            msg.appendChild(copyButton);
-            chatMsg.appendChild(msg);
-            chatMsg.scrollTop = chatMsg.scrollHeight;
-        }
-
-        document.getElementById('user-input').addEventListener('keypress', function (e) {
-            if (e.key === 'Enter') {
-                sendMessage();
-            }
-        });
     </script>
 </body>
 
-    </html>
+</html>
