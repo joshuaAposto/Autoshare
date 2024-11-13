@@ -9,12 +9,10 @@
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
 
         :root {
-            --primary-color: #007bff;
-            --background-color: #060615;
-            --text-color: #e0e0ff;
-            --nav-height: 80px;
-            --transition-speed: 0.3s;
-            --glow-strength: 5px;
+            --primary-color: #00adb5;
+            --secondary-color: #393e46;
+            --background-color: #222831;
+            --text-color: #eeeeee;
         }
 
         * {
@@ -24,35 +22,55 @@
         }
 
         body {
-            font-family: 'Orbitron', sans-serif;
-            background-color: var(--background-color);
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, var(--background-color), var(--secondary-color));
             color: var(--text-color);
-            line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
             overflow-x: hidden;
-            background-image:
-                radial-gradient(circle at 10% 20%, rgba(0, 247, 255, 0.1) 0%, transparent 20%),
-                radial-gradient(circle at 90% 80%, rgba(255, 0, 230, 0.1) 0%, transparent 20%);
-            background-attachment: fixed;
+        }
+
+        #particles-js {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
         }
 
         .wrapper-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-            text-align: center;
+            max-width: 600px;
+            width: 100%;
+            padding: 30px;
+            background-color: rgba(57, 62, 70, 0.8);
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+            animation: fadeIn 1s ease;
+            position: relative;
+            z-index: 1;
         }
 
         h1 {
             text-align: center;
-            font-size: 2rem;
-            margin-bottom: 2px;
             color: var(--primary-color);
+            margin-bottom: 20px;
+            font-size: 36px;
+            font-weight: bold;
+            animation: fadeInDown 1s ease;
         }
 
         p {
-            margin-bottom: 2px;
-            padding: 5px;
-            border-radius: 50px;
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 18px;
+            color: var(--text-color);
+            animation: fadeIn 1s ease 0.5s both;
         }
 
         .form-container {
@@ -156,13 +174,24 @@
         }
 
         .success {
-            background-color: #00f7ff;
+            background-color: #4caf50;
             color: #fff;
         }
 
         .error {
-            background-color: #00f7ff;
+            background-color: #f44336;
             color: #fff;
+        }
+
+        .tutorial {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .video-container {
+            display: none;
+            margin-top: 20px;
+            animation: fadeIn 0.5s ease;
         }
 
         .logo {
@@ -194,6 +223,115 @@
         .dev-btn:hover {
             background-color: #365899;
             transform: translateY(-2px);
+        }
+
+        #chat-button {
+            position: fixed;
+            bottom: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            right: 20px;
+            background-color: var(--primary-color);
+            color: var(--text-color);
+            border: none;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        #chat-button:hover {
+            transform: scale(1.1);
+        }
+
+        #chat-container {
+            display: none;
+            position: fixed;
+            bottom: 90px;
+            right: 20px;
+            width: 300px;
+            height: 400px;
+            background-color: rgba(57, 62, 70, 0.9);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+        }
+
+        #chat-messages {
+            height: 340px;
+            overflow-y: auto;
+            padding: 10px;
+        }
+
+        .message {
+            margin-bottom: 10px;
+            padding: 8px 12px;
+            border-radius: 8px;
+            max-width: 80%;
+            position: relative;
+            display: inline-block;
+        }
+
+        .user-message {
+            background-color: var(--primary-color);
+            color: var(--text-color);
+            /* align-self: flex-end; */
+            float: right;
+            clear: both;
+            margin-left: auto;
+
+        }
+
+        /* .assistant-message {
+            background-color: var(--secondary-color);
+            color: var(--text-color);
+            align-self: flex-start;
+        } */
+
+        .assistant-message {
+            background-color: var(--secondary-color);
+            color: var(--text-color);
+            float: left;
+            clear: both;
+        }
+
+        .copy-button {
+            display: none;
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background-color: rgba(255, 255, 255, 0.3);
+            border: none;
+            border-radius: 4px;
+            padding: 2px 5px;
+            font-size: 12px;
+            cursor: pointer;
+        }
+
+        .message:hover .copy-button,
+        .message:active .copy-button {
+            display: block;
+        }
+
+        #chat-input {
+            display: flex;
+            padding: 10px;
+        }
+
+        #chat-input input {
+            flex-grow: 1;
+            margin-right: 10px;
+        }
+
+        #chat-input button {
+            padding: 8px 12px;
+            font-size: 14px;
         }
 
         @keyframes fadeIn {
@@ -307,11 +445,107 @@
             <button type="submit" id="submit-button" disabled>SUBMIT</button>
             <div id="result"></div>
         </form>
+        <div class="tutorial">
+            <button class="submit-button" onclick="toggleVideo()">Tutorial Vid</button>
+        </div>
+        <div class="video-container" id="video-container">
+            <video controls width="100%">
+                <source src="https://i.imgur.com/zrFIInL.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </div>
     </div>
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
     <script>
         const serverUrls = {
             server1: 'https://autoshare-ya35.onrender.com'
         };
+
+        particlesJS('particles-js', {
+            particles: {
+                number: {
+                    value: 80,
+                    density: {
+                        enable: true,
+                        value_area: 800
+                    }
+                },
+                color: {
+                    value: "#ffffff"
+                },
+                shape: {
+                    type: "circle",
+                    stroke: {
+                        width: 0,
+                        color: "#000000"
+                    },
+                },
+                opacity: {
+                    value: 0.5,
+                    random: false,
+                },
+                size: {
+                    value: 3,
+                    random: true,
+                },
+                line_linked: {
+                    enable: true,
+                    distance: 150,
+                    color: "#ffffff",
+                    opacity: 0.4,
+                    width: 1
+                },
+                move: {
+                    enable: true,
+                    speed: 6,
+                    direction: "none",
+                    random: false,
+                    straight: false,
+                    out_mode: "out",
+                    bounce: false,
+                },
+            },
+            interactivity: {
+                detect_on: "canvas",
+                events: {
+                    onhover: {
+                        enable: true,
+                        mode: "repulse"
+                    },
+                    onclick: {
+                        enable: true,
+                        mode: "push"
+                    },
+                    resize: true
+                },
+                modes: {
+                    grab: {
+                        distance: 400,
+                        line_linked: {
+                            opacity: 1
+                        }
+                    },
+                    bubble: {
+                        distance: 400,
+                        size: 40,
+                        duration: 2,
+                        opacity: 8,
+                        speed: 3
+                    },
+                    repulse: {
+                        distance: 200,
+                        duration: 0.4
+                    },
+                    push: {
+                        particles_nb: 4
+                    },
+                    remove: {
+                        particles_nb: 2
+                    }
+                },
+            },
+            retina_detect: true
+        });
 
         async function checkServerStatus() {
             const servers = document.querySelectorAll('#server option');
@@ -400,6 +634,11 @@
             } finally {
                 button.disabled = false;
             }
+        }
+
+        function toggleVideo() {
+            const videoContainer = document.getElementById('video-container');
+            videoContainer.style.display = videoContainer.style.display === 'block' ? 'none' : 'block';
         }
     </script>
 </body>
