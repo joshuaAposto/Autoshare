@@ -27,52 +27,143 @@
         body {
             font-family: 'Outfit', sans-serif;
         }
+
         #result {
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 10px;
+            height: 5px;
             text-align: center;
+        }
+
+        .custom-dropdown {
+            position: relative;
+        }
+
+        .custom-dropdown select {
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            background-color: #1f2937;
+            border: 2px solid #374151;
+            color: white;
+            padding: 1rem 2.5rem 1rem 1rem;
+            width: 100%;
+            border-radius: 0.75rem;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+        }
+
+        .custom-dropdown:after {
+            content: "▼";
+            position: absolute;
+            top: 50%;
+            right: 10px;
+            transform: translateY(-50%);
+            pointer-events: none;
+            font-size: 1.2rem;
+            color: #e5e7eb;
+        }
+
+        .custom-dropdown select:focus {
+            outline: none;
+            border-color: #FF2C55;
+            background-color: #2d3748;
+        }
+
+        .button:hover {
+            background-color: #e31a5b;
+        }
+
+        .form-label {
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: #e5e7eb;
+        }
+
+        .form-container {
+            max-width: 500px;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        .button {
+            width: 100%;
+            padding: 1rem;
+            background-color: #FF2C55;
+            text-white;
+            font-weight: bold;
+            border-radius: 0.75rem;
+            transition: transform 0.2s ease-in-out, background-color 0.3s ease;
+        }
+
+        .button:hover {
+            background-color: #e31a5b;
+            transform: scale(1.05);
+        }
+
+        .button:disabled {
+            background-color: #6B7280;
+            cursor: not-allowed;
+        }
+
+        .input {
+            background-color: #1f2937;
+            border: 2px solid #374151;
+            padding: 1rem;
+            border-radius: 0.75rem;
+            color: white;
+            width: 100%;
+            transition: border-color 0.3s ease, background-color 0.3s ease;
+        }
+
+        .input:focus {
+            border-color: #FF2C55;
+            background-color: #2d3748;
+            outline: none;
+        }
+
+        .input::placeholder {
+            color: #A0AEC0;
         }
     </style>
 </head>
 
 <body class="bg-secondary text-white min-h-screen flex items-center justify-center">
-    <div class="container mx-auto px-4 sm:max-w-md">
+    <div class="form-container px-4 sm:px-8 lg:px-12">
         <div class="bg-gray-800 p-8 rounded-lg shadow-xl">
             <h1 class="text-3xl font-bold text-primary mb-6 text-center">SHARE BOOST</h1>
             <form id="share-boost-form" class="space-y-5">
                 <div>
-                    <label for="cookies" class="block text-sm font-medium text-gray-400">APPSTATE:</label>
+                    <label for="cookies" class="form-label">APPSTATE:</label>
                     <input type="text" id="cookies" name="cookie" required placeholder="Enter your Appstate"
-                        class="mt-1 w-full px-4 py-3 bg-gray-900 text-white rounded-lg focus:outline-none focus:ring focus:ring-primary">
+                        class="input">
                 </div>
                 <div>
-                    <label for="urls" class="block text-sm font-medium text-gray-400">POST LINK:</label>
+                    <label for="urls" class="form-label">POST LINK:</label>
                     <input type="text" id="urls" name="url" required placeholder="Enter the Facebook post URL"
-                        class="mt-1 w-full px-4 py-3 bg-gray-900 text-white rounded-lg focus:outline-none focus:ring focus:ring-primary">
+                        class="input">
                 </div>
                 <div>
-                    <label for="amounts" class="block text-sm font-medium text-gray-400">SHARE LIMIT:</label>
+                    <label for="amounts" class="form-label">SHARE LIMIT:</label>
                     <input type="number" id="amounts" name="amount" required placeholder="Number of shares" min="1"
-                        class="mt-1 w-full px-4 py-3 bg-gray-900 text-white rounded-lg focus:outline-none focus:ring focus:ring-primary">
+                        class="input">
                 </div>
                 <div>
-                    <label for="intervals" class="block text-sm font-medium text-gray-400">DELAY:</label>
-                    <input type="number" id="intervals" name="interval" required placeholder="Enter Delay (in seconds)" min="1"
-                        class="mt-1 w-full px-4 py-3 bg-gray-900 text-white rounded-lg focus:outline-none focus:ring focus:ring-primary">
+                    <label for="intervals" class="form-label">DELAY:</label>
+                    <input type="number" id="intervals" name="interval" required placeholder="DELAY (Seconds)" min="1"
+                        class="input">
                 </div>
-                <div>
-                    <label for="server" class="block text-sm font-medium text-gray-400">SERVER:</label>
-                    <select id="server" name="server" required
-                        class="mt-1 w-full px-4 py-3 bg-gray-900 text-white rounded-lg focus:outline-none focus:ring focus:ring-primary">
+                <div class="custom-dropdown">
+                    <label for="server" class="form-label">SERVER:</label>
+                    <select id="server" name="server" required>
                         <option value="server1">Server 1</option>
                         <option value="server2">Server 2</option>
                     </select>
                 </div>
                 <button type="submit" id="submit-button"
-                    class="w-full py-3 bg-primary text-white font-semibold rounded-lg hover:bg-red-500 transition disabled:opacity-50 disabled:cursor-not-allowed"
-                    disabled>
+                    class="button py-3 disabled:opacity-50" disabled>
                     START SHARING
                 </button>
                 <div id="result" class="text-sm mt-4 text-center"></div>
